@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EduPay</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#c9ecff;--card:#fff;--text:#2b2160;--muted:#6a5fb0;--green:#2fd67b;--primary:#ff4f9a;--lilac:#d9b8ff;--yellow:#ffe14d;--ok:#a8f5a0;--bad:#ffb3b3;--bar:#fff;--on:#fff;--line:#3d2c8d;--shadow:#c2307a;--q:#1a6bff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--q:#7fd1ff;--bg:#2a1b5e;--card:#3b2a7a;--text:#fff;--muted:#cbbcff;--lilac:#7a4fd6;--yellow:#8a6a00;--ok:#1f7a3d;--bad:#a3324a;--bar:#3b2a7a;--line:#ffd93d}}
+:root[data-theme="dark"]{--q:#7fd1ff;--bg:#2a1b5e;--card:#3b2a7a;--text:#fff;--muted:#cbbcff;--lilac:#7a4fd6;--yellow:#8a6a00;--ok:#1f7a3d;--bad:#a3324a;--bar:#3b2a7a;--line:#ffd93d}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font-family:"Fredoka","Comic Sans MS","Segoe UI",system-ui,sans-serif;font-size:17px;max-width:560px;margin:0 auto;display:flex;flex-direction:column}
+main{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+h1{font-size:30px;margin:0;color:#7b2ff7;text-shadow:2px 2px 0 #ffe14d}
+.h2{font-size:20px;font-weight:700;color:#7b2ff7}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) h1{color:#ffe14d;text-shadow:2px 2px 0 #ff4f9a}:root:not([data-theme="light"]) .h2{color:#ffe14d}}
+:root[data-theme="dark"] h1{color:#ffe14d;text-shadow:2px 2px 0 #ff4f9a}:root[data-theme="dark"] .h2{color:#ffe14d}
+.muted{color:var(--muted)}
+.card{background:var(--card);border-radius:30px;padding:16px;border:3px solid var(--line);box-shadow:0 5px 0 var(--line)}
+.row{display:flex;justify-content:space-between;align-items:center}
+.bar{height:20px;border-radius:10px;border:3px solid var(--line);background:rgba(128,128,128,.25);margin:10px 0;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,#2fd67b,#ffe14d,#ff4f9a);border-radius:10px;transition:width .3s}
+.big{font-size:40px;font-weight:700;color:var(--primary)}
+button{font:inherit;font-weight:600;cursor:pointer;border:0;border-radius:24px;padding:12px 20px;background:var(--primary);color:var(--on);margin-top:10px;box-shadow:0 5px 0 var(--shadow);transition:transform .1s,box-shadow .1s}
+button:active{transform:translateY(4px);box-shadow:0 1px 0 var(--shadow)}
+button.opt{width:100%;margin:0;border-radius:22px;background:var(--card);color:var(--text);text-align:left;padding:14px 18px;border:3px solid var(--line);box-shadow:0 4px 0 var(--line)}
+button.opt.ok{background:var(--ok)}button.opt.bad{background:var(--bad)}
+.badges{display:flex;gap:8px}
+.badge{flex:1;text-align:center;border-radius:24px;padding:12px 6px;background:var(--card);font-size:13px;font-weight:600;border:3px dashed var(--line);opacity:.75}
+.badge.on{background:var(--yellow);border-style:solid;opacity:1;color:#2b2160;transform:rotate(-2deg)}
+.badge b{display:block;font-size:30px;font-weight:400}
+nav{display:flex;gap:6px;background:var(--bar);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px));border-top:4px solid var(--line)}
+nav button{flex:1;margin:0;background:none;color:var(--muted);border-radius:20px;padding:8px;font-size:13px;box-shadow:none}
+nav button span{display:block;font-size:22px}
+nav button.on{color:#2b2160;background:var(--yellow);border:3px solid var(--line)}
+input[type=range]{width:100%;accent-color:var(--primary)}
+.bold{font-weight:700}
+.mascot{display:flex;align-items:center;gap:14px}
+.fox{font-size:60px;animation:bob 1.6s ease-in-out infinite;transform-origin:bottom}
+.bubble{background:var(--card);border:3px solid var(--line);border-radius:22px;padding:8px 14px;font-weight:600;position:relative}
+.bubble::before{content:"";position:absolute;left:-11px;top:50%;margin-top:-8px;border:8px solid transparent;border-right-color:var(--line);border-left:0}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(4deg)}}
+#fx{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+.cf{position:absolute;top:-20px;width:10px;height:14px;border-radius:3px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+.pop{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%) scale(0);background:var(--yellow);color:#2b2160;border:4px solid var(--line);border-radius:30px;padding:20px 28px;font-size:26px;font-weight:700;text-align:center;box-shadow:0 8px 0 var(--line);animation:pop 2s ease forwards;white-space:nowrap}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(0)}15%{transform:translate(-50%,-50%) scale(1.15)}25%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@media (prefers-reduced-motion:reduce){.fox,.cf{animation:none}.pop{animation:none;transform:translate(-50%,-50%)}}
+</style>
+</head>
+<body>
+<div id="fx"></div>
+<main id="v"></main>
+<nav id="nav"></nav>
+<script>
+var T=["Presupuesto","Ahorro","Deudas","Pagos"];
+function ex(t,l,q,a,why,o){return{t:t,l:l,q:q,o:o,a:a,why:why}}
+var BANK=[
+ex(0,1,"Recibes $400 al mes. Según la regla 50/30/20, ¿cuánto va a necesidades?",1,"50% de 400 = $200.",["$80","$200","$120"]),
+ex(0,2,"¿Cuál es un gasto variable?",2,"Los gastos variables cambian cada mes, como salidas o comida fuera.",["Renta","Internet fijo","Salidas a comer"]),
+ex(0,3,"Gastas $310 de $400 de ingreso. ¿Qué porcentaje ahorras?",0,"(400-310)/400 = 22.5%.",["22.5%","10%","31%"]),
+ex(1,1,"¿Cuándo conviene ahorrar?",0,"Págate primero: separa el ahorro al recibir el dinero.",["Al recibir el ingreso","Si sobra al final","Nunca en la universidad"]),
+ex(1,2,"¿Qué es un fondo de emergencia?",1,"Cubre imprevistos; ideal 3 a 6 meses de gastos.",["Dinero para vacaciones","Reserva para imprevistos","Una inversión de alto riesgo"]),
+ex(1,3,"Ahorras $25 por semana. ¿Cuánto en 12 semanas?",2,"25 × 12 = $300.",["$250","$200","$300"]),
+ex(2,1,"Una tarjeta de crédito cobra intereses cuando...",2,"Si no pagas el total, el saldo genera intereses.",["La usas","La guardas","No pagas el total"]),
+ex(2,2,"¿Qué deuda pagas primero para ahorrar intereses?",0,"El método avalancha prioriza la tasa más alta.",["La de mayor tasa","La más pequeña siempre","La más nueva"]),
+ex(2,3,"Debes $500 al 3% mensual. ¿Interés del primer mes?",1,"500 × 0.03 = $15.",["$3","$15","$30"]),
+ex(3,1,"Para no pagar recargos, lo mejor es...",0,"Domiciliar o programar recordatorios evita atrasos.",["Programar recordatorios","Pagar cuando recuerdes","Ignorar el aviso"]),
+ex(3,2,"Un pago a meses sin intereses...",2,"Divide el precio, pero compromete tu ingreso futuro.",["Es gratis siempre","No cuenta como deuda","Compromete tu presupuesto futuro"]),
+ex(3,3,"Compras $240 a 6 pagos. ¿Cada pago?",1,"240 / 6 = $40.",["$30","$40","$60"])
+];
+var P={xp:0,saved:0,r:[0,0,0,0],w:[0,0,0,0]};
+try{var s=localStorage.getItem("edupay");if(s)P=Object.assign(P,JSON.parse(s))}catch(e){}
+function save(){try{localStorage.setItem("edupay",JSON.stringify(P))}catch(e){}}
+function level(){return Math.floor(P.xp/100)+1}
+function totalRight(){return P.r.reduce(function(a,b){return a+b},0)}
+function acc(t){var n=P.r[t]+P.w[t];return n==0?0.5:P.r[t]/n}
+function weak(t){return(P.w[t]+1)/(P.r[t]+P.w[t]+2)}
+function weakest(){var b=0;for(var t=1;t<4;t++)if(weak(t)>weak(b))b=t;return b}
+function next(last){
+ var best=0,bs=-1;
+ for(var t=0;t<4;t++){var sc=weak(t)+Math.random()*0.08;if(sc>bs){bs=sc;best=t}}
+ var a=acc(best),target=a>=0.8?3:a>=0.5?2:1;
+ var c=BANK.filter(function(e){return e.t==best&&e!==last}).sort(function(x,y){return Math.abs(x.l-target)-Math.abs(y.l-target)}).slice(0,2);
+ return c[Math.floor(Math.random()*c.length)];
+}
+var tab=0,cur=next(null),sel=null,bud=[250,120,50,60];
+var NAMES=["Vivienda","Comida","Transporte","Ocio"],INCOME=600;
+var v=document.getElementById("v");
+function hi(){return P.xp==0?"¡Hola! Soy Zorri. ¡Empecemos a ahorrar!":P.xp%100>=70?"¡Casi subes de nivel! 🚀":totalRight()>=10?"¡Eres un campeón del ahorro! 🏆":"¡Vamos, tú puedes! 💪"}
+function home(){
+ var b=[["🪙","Primer acierto",totalRight()>=1],["🧠","10 aciertos",totalRight()>=10],["🦊","Nivel 4",level()>=4]];
+ return '<div class="mascot"><div class="fox">🦊</div><div class="bubble">'+hi()+'</div></div><h1>Ahorro gamificado</h1>'+
+ '<div class="card"><div class="row"><span class="bold">Nivel '+level()+'</span><span>'+P.xp+' XP</span></div>'+
+ '<div class="bar"><i style="width:'+(P.xp%100)+'%"></i></div>'+
+ '<div class="big">⭐ '+totalRight()+'</div><div class="muted">respuestas correctas</div></div>'+
+ '<div class="card" style="background:var(--lilac)"><div class="bold">🤖 Recomendado por la IA</div><div>Tu tema más débil es '+T[weakest()]+'. Te prepararemos ejercicios para reforzarlo.</div><button onclick="go(1)">Practicar ahora</button></div>'+
+ '<div class="h2">Tus insignias</div><div class="badges">'+
+ b.map(function(x){return '<div class="badge'+(x[2]?' on':'')+'"><b>'+x[0]+'</b>'+x[1]+'</div>'}).join("")+'</div>';
+}
+function quiz(){
+ var h='<h1>Reto personalizado</h1><div class="muted">Tema: '+T[cur.t]+' · Nivel '+cur.l+' (según tus errores)</div>'+
+ '<div class="card bold" style="font-size:20px;color:var(--q)">'+cur.q+'</div>';
+ cur.o.forEach(function(o,i){
+  var c="";if(sel!==null){if(i==cur.a)c=" ok";else if(i==sel)c=" bad"}
+  h+='<button class="opt'+c+'" onclick="pick('+i+')">'+o+'</button>';
+ });
+ if(sel!==null){
+  h+='<div class="card"><div class="bold">'+(sel==cur.a?"🦊 ¡Wow, correcto! +20 XP ⭐":"🦊 ¡Casi! Tú puedes. +5 XP 💪")+'</div><div>'+cur.why+'</div></div>'+
+  '<button style="width:100%" onclick="again()">Siguiente reto</button>';
+ }
+ return h;
+}
+function sim(){
+ var left=INCOME-bud.reduce(function(a,b){return a+b},0),pct=left/INCOME;
+ var msg=left<0?"⚠️ Gastas más de lo que ganas.":pct<0.2?"Intenta ahorrar al menos 20%.":"🎉 ¡Excelente! Cumples la meta de ahorro.";
+ var h='<h1>Simulador de presupuesto</h1><div class="muted">Ingreso mensual: $600. Reparte tu dinero.</div><div class="card">';
+ NAMES.forEach(function(n,i){h+='<div id="l'+i+'">'+n+': $'+bud[i]+'</div><input type="range" min="0" max="400" value="'+bud[i]+'" oninput="slide('+i+',this.value)">'});
+ h+='</div><div class="card" id="res" style="background:var(--'+(pct>=0.2?'ok':'bad')+')"><div class="bold" style="font-size:20px">Te quedan $'+left+' ('+Math.trunc(pct*100)+'%)</div><div>'+msg+'</div></div>';
+ return h;
+}
+function slide(i,val){
+ bud[i]=+val;document.getElementById("l"+i).textContent=NAMES[i]+": $"+bud[i];
+ var left=INCOME-bud.reduce(function(a,b){return a+b},0),pct=left/INCOME;
+ var r=document.getElementById("res");r.style.background="var(--"+(pct>=0.2?"ok":"bad")+")";
+ r.innerHTML='<div class="bold" style="font-size:20px">Te quedan $'+left+' ('+Math.trunc(pct*100)+'%)</div><div>'+(left<0?"⚠️ Gastas más de lo que ganas.":pct<0.2?"Intenta ahorrar al menos 20%.":"🎉 ¡Excelente! Cumples la meta de ahorro.")+'</div>';
+}
+function pick(i){if(sel!==null)return;var b=level();sel=i;var ok=i==cur.a;if(ok)P.r[cur.t]++;else P.w[cur.t]++;P.xp+=ok?20:5;save();render();if(ok)boom(40);if(level()>b)lvlUp()}
+function again(){cur=next(cur);sel=null;render();v.scrollTop=0}
+function boom(n){var f=document.getElementById("fx"),c=["#ff4f9a","#ffe14d","#2fd67b","#4db8ff","#b36bff"];for(var i=0;i<n;i++){var e=document.createElement("i");e.className="cf";e.style.left=Math.random()*100+"%";e.style.background=c[i%5];e.style.animationDelay=Math.random()*.5+"s";e.style.animationDuration=1.2+Math.random()+"s";f.appendChild(e);setTimeout(e.remove.bind(e),2800)}}
+function lvlUp(){var f=document.getElementById("fx"),d=document.createElement("div");d.className="pop";d.innerHTML="🦊🎉<br>¡Subiste al nivel "+level()+"!";f.appendChild(d);boom(70);setTimeout(d.remove.bind(d),2100)}
+function go(t){tab=t;render()}
+function render(){
+ v.innerHTML=tab==0?home():tab==1?quiz():sim();
+ var t=[["🏠","Inicio"],["🎯","Retos"],["🧮","Simulador"]];
+ document.getElementById("nav").innerHTML=t.map(function(x,i){return '<button class="'+(tab==i?'on':'')+'" onclick="go('+i+')"><span>'+x[0]+'</span>'+x[1]+'</button>'}).join("");
+}
+render();
+</script>
+</body>
+</html>
